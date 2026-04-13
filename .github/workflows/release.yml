@@ -32,17 +32,17 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: build and push image
+      - name: Build and push image
         run: |
           make docker-build-all docker-push-all \
             REGISTRY=ghcr.io/${{ github.repository_owner }} \
             TAG=${{ env.RELEASE_TAG }}
-
-      - name: generate release artifacts
+      - name: Restore modified files after docker-build
+        run: git checkout -- .
+      - name: Generate release artifacts
         run: |
           make release
-      - name: generate release notes
+      - name: Generate release notes
         run: |
           make release-notes
       - name: Release

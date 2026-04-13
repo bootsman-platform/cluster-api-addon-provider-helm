@@ -243,7 +243,7 @@ CAPI_KIND_CLUSTER_NAME ?= capi-test
 
 TAG ?= dev
 ARCH ?= $(shell go env GOARCH)
-ALL_ARCH = amd64 arm arm64 ppc64le s390x
+ALL_ARCH = amd64 #arm arm64 ppc64le s390x
 
 # Allow overriding manifest generation destination directory
 MANIFEST_ROOT ?= config
