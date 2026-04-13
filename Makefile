@@ -227,7 +227,7 @@ ifndef REGISTRY
 	REGISTRY ?= localhost:5000
 endif
 
-PROD_REGISTRY ?= ghcr.io/bootsman-platform/cluster-api-helm
+PROD_REGISTRY ?= ghcr.io/bootsman-platform
 
 # STAGING_REGISTRY ?= gcr.io/k8s-staging-cluster-api-helm
 # STAGING_BUCKET ?= artifacts.k8s-staging-cluster-api-helm.appspot.com
