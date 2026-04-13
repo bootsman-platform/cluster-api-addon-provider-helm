@@ -227,10 +227,10 @@ ifndef REGISTRY
 	REGISTRY ?= localhost:5000
 endif
 
-PROD_REGISTRY ?= registry.k8s.io/cluster-api-helm
+PROD_REGISTRY ?= ghcr.io/bootsman-platform/cluster-api-helm
 
-STAGING_REGISTRY ?= gcr.io/k8s-staging-cluster-api-helm
-STAGING_BUCKET ?= artifacts.k8s-staging-cluster-api-helm.appspot.com
+# STAGING_REGISTRY ?= gcr.io/k8s-staging-cluster-api-helm
+# STAGING_BUCKET ?= artifacts.k8s-staging-cluster-api-helm.appspot.com
 
 # core
 IMAGE_NAME ?= cluster-api-helm-controller
@@ -551,12 +551,14 @@ ifneq (,$(findstring -,$(RELEASE_TAG)))
 endif
 # the previous release tag, e.g., v0.3.9, excluding pre-release tags
 PREVIOUS_TAG ?= $(shell git tag -l | grep -E "^v[0-9]+\.[0-9]+\.[0-9]+$$" | sort -V | grep -B1 $(RELEASE_TAG) | head -n 1 2>/dev/null)
+## ref name of the current branch
+RELEASE_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
 ## set by Prow, ref name of the base branch, e.g., main
 RELEASE_ALIAS_TAG := $(PULL_BASE_REF)
 RELEASE_DIR := out
 RELEASE_NOTES_DIR := _releasenotes
 GIT_REPO_NAME ?= cluster-api-addon-provider-helm
-GIT_ORG_NAME ?= kubernetes-sigs
+GIT_ORG_NAME ?= bootsman-platform
 USER_FORK ?= $(shell git config --get remote.origin.url | cut -d/ -f4) # only works on https://github.com/<username>/cluster-api-addon-provider-helm.git style URLs
 ifeq ($(USER_FORK),)
 USER_FORK := $(shell git config --get remote.origin.url | cut -d: -f2 | cut -d/ -f1) # for git@github.com:<username>/cluster-api-addon-provider-helm.git style URLs
