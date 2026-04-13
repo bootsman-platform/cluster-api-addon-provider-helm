@@ -5,9 +5,11 @@ on:
     # Sequence of patterns matched against refs/tags
     tags:
     - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
-
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 permissions:
   contents: write # Allow to create a release.
+  packages: write # Allow to upload release assets.
 
 jobs:
   build:
@@ -24,10 +26,23 @@ jobs:
         uses: actions/setup-go@4dc6199c7b1a012772edbd06daecab0f50c9053c # tag=v6.1.0
         with:
           go-version: '^1.24'
-      - name: generate release artifacts
+      - name: Log in to ghcr.io
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push image
+        run: |
+          make docker-build-all docker-push-all \
+            REGISTRY=ghcr.io/${{ github.repository_owner }} \
+            TAG=${{ env.RELEASE_TAG }}
+      - name: Restore modified files after docker-build
+        run: git checkout -- .
+      - name: Generate release artifacts
         run: |
           make release
-      - name: generate release notes
+      - name: Generate release notes
         run: |
           make release-notes
       - name: Release

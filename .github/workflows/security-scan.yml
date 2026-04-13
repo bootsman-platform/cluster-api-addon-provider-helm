@@ -9,6 +9,9 @@ on:
 # Remove all permissions from GITHUB_TOKEN except metadata.
 permissions: {}
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  
 jobs:
   scan:
     strategy:
