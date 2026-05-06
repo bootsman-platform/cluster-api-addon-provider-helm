@@ -23,7 +23,9 @@ jobs:
         contains(github.event.comment.body, '/backport') &&
         (
           github.event.comment.author_association == 'MEMBER' ||
-          github.event.comment.author_association == 'OWNER'
+          github.event.comment.author_association == 'OWNER' ||
+          github.event.comment.author_association == 'COLLABORATOR' ||
+          github.event.comment.author_association == 'ADMIN'
         )
       )
     steps:
