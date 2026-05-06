@@ -1,0 +1,33 @@
+name: Cherry Pick
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  cherry-pick:
+    name: Cherry Pick
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.pull_request != null &&
+      github.event.issue.state == 'closed' &&
+      startsWith(github.event.comment.body, '/cherry-pick') &&
+      (
+        github.event.comment.author_association == 'MEMBER' ||
+        github.event.comment.author_association == 'OWNER' ||
+        github.event.comment.author_association == 'COLLABORATOR' ||
+        github.event.comment.author_association == 'ADMIN'
+      )
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cherry pick
+        uses: vendoo/gha-cherry-pick@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
